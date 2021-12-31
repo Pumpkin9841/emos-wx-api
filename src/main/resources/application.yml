@@ -68,3 +68,8 @@ emos:
     expire: 5
     #令牌缓存时间 10天
     cache-expire: 10
+
+
+wx:
+  app-id: wx55583ff42ac95a39
+  app-secret: 70c625b35a16e63007aaa3bab193686b
