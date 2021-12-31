@@ -5,7 +5,7 @@
         select if(count(*) , true , false ) from tb_user where root = 1
     </select>
 
-    <select id="searchUserPermissions" parameterType="int" resultType="String">
+    <select id="searchUserPermissions" parameterType="int" resultType="string">
         SELECT p.permission_name
         FROM tb_user u
         JOIN tb_role r ON JSON_CONTAINS(u.role, CAST(r.id AS CHAR))
@@ -49,7 +49,7 @@
         create_time = #{createTime}
     </insert>
 
-    <select id="searchIdByOpenId" parameterType="String" resultType="Integer">
+    <select id="searchIdByOpenId" parameterType="string" resultType="integer">
         select id from tb_user where open_id = #{openId} and status = 1
     </select>
 </mapper>
