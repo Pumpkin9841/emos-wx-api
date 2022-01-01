@@ -13,6 +13,13 @@
         WHERE u.id = #{userId} AND u.status = 1;
     </select>
 
+    <select id="searchById" parameterType="int" resultType="com.zf.emos.wx.db.pojo.TbUser">
+        SELECT
+            id, open_id, nickname, photo, name, sex, tel, role, root, dept_id, status, create_time
+        FROM tb_user WHERE id=#{userId} AND status = 1
+    </select>
+
+
     <insert id="insert" parameterType="hashmap">
         insert into tb_user
         set

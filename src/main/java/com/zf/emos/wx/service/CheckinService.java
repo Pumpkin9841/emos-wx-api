@@ -14,4 +14,6 @@ public interface CheckinService {
      * @return 是否能签到的信息
      */
     public String validCanCheckin(int userId , String date) ;
+
+    public void checkin(HashMap param) ;
 }
