@@ -46,6 +46,12 @@ spring:
       username: admin
       password: abc123456
 
+  mail:
+    default-encoding: UTF-8
+    host: smtp.163.com
+    username: pumpkin9841@163.com
+    password: Lx18721500347.
+
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.example.emos.wx.db.pojo
@@ -71,6 +77,12 @@ emos:
   face:
     createFaceModelUrl: http://192.168.88.128:3000/create_face_model
     checkinUrl: http://192.168.88.128:3000/checkin
+  email:
+    system: pumpkin9841@163.com
+    hr: 602437361@qq.com
+  image-folder: D:/emos/image
+  code: A3D1E72CE42186E2
+
 
 wx:
   app-id: wx55583ff42ac95a39

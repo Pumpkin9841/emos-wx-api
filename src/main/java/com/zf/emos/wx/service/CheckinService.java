@@ -1,5 +1,6 @@
 package com.zf.emos.wx.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -16,4 +17,24 @@ public interface CheckinService {
     public String validCanCheckin(int userId , String date) ;
 
     public void checkin(HashMap param) ;
+
+    public void createFaceModel(int userId , String path) ;
+
+    /**
+     * 根据userId查询该用户今天的签到信息
+     * @param userId 用户id
+     * @return 用户姓名、部门、签到地址等信息的map
+     */
+    public HashMap searchTodayCheckin(int userId) ;
+
+    /**
+     * 根据userId查询用户签到的总天数
+     * @param userId 用户id
+     * @return 用户签到的总天数
+     */
+    public long searchCheckinDays(int userId) ;
+
+    public ArrayList<HashMap> searchWeekCheckin(HashMap param) ;
+
+    public ArrayList<HashMap> searchMonthCheckin(HashMap param) ;
 }

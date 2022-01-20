@@ -4,4 +4,11 @@
     <select id="searchTodayIsWorkdays" resultType="integer">
         select id from tb_workday where date = current_date LIMIT 1
     </select>
+
+    <select id="searchWorkdayInRange" parameterType="hashmap" resultType="string">
+        SELECT date
+        FROM tb_workday
+        WHERE date BETWEEN #{startDate} AND #{endDate}
+    </select>
+
 </mapper>

@@ -2,6 +2,7 @@ package com.zf.emos.wx.service;
 
 import com.zf.emos.wx.db.pojo.TbUser;
 
+import java.util.HashMap;
 import java.util.Set;
 
 /**
@@ -39,5 +40,19 @@ public interface UserService {
      * @return 用户对象
      */
     public TbUser searchById(int userId);
+
+    /**
+     * 根据用户id查找用户入职日期
+     * @param userId 用户id
+     * @return 用户入职日期
+     */
+    public String searchUserHiredate(int userId) ;
+
+    /**
+     * 根据用户id查找用户姓名、微信头像、部门
+     * @param userId 用户id
+     * @return HashMap{ name:'' , photo:'', deptName:'' }
+     */
+    public HashMap searchUserSummary(int userId) ;
 
 }

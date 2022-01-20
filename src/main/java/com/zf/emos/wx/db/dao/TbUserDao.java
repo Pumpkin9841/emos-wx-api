@@ -18,4 +18,10 @@ public interface TbUserDao {
 
     public TbUser searchById(int userId);
 
+    public HashMap searchNameAndDept(int userId);
+
+    public String searchUserHiredate(int userId) ;
+
+    public HashMap searchUserSummary(int userId) ;
+
 }

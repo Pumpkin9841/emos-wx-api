@@ -19,6 +19,18 @@
         FROM tb_user WHERE id=#{userId} AND status = 1
     </select>
 
+    <select id="searchNameAndDept" parameterType="int" resultType="HashMap">
+        SELECT u.name, d.dept_name
+        FROM tb_user u LEFT JOIN tb_dept d ON u.dept_id=d.id
+        WHERE u.id = #{userId} AND u.status = 1
+    </select>
+    
+    <select id="searchUserHiredate" parameterType="int" resultType="string">
+        select hiredate
+        from tb_user
+        where id = #{userId} and status = 1
+    </select>
+
 
     <insert id="insert" parameterType="hashmap">
         insert into tb_user
@@ -59,4 +71,11 @@
     <select id="searchIdByOpenId" parameterType="string" resultType="integer">
         select id from tb_user where open_id = #{openId} and status = 1
     </select>
+
+    <select id="searchUserSummary" parameterType="int" resultType="hashmap">
+        SELECT u.name , u.photo , d.dept_name AS deptName
+        FROM tb_user u LEFT JOIN tb_dept d ON u.dept_id = d.id
+        WHERE u.id = #{userId} AND u.status = 1
+    </select>
+
 </mapper>
