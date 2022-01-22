@@ -2,13 +2,16 @@ package com.zf.emos.wx.service.impl;
 
 
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.zf.emos.wx.db.dao.TbUserDao;
+import com.zf.emos.wx.db.pojo.MessageEntity;
 import com.zf.emos.wx.db.pojo.TbUser;
 import com.zf.emos.wx.exception.EmosException;
 import com.zf.emos.wx.service.UserService;
+import com.zf.emos.wx.task.MessageTask;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +39,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TbUserDao userDao ;
+
+    @Autowired
+    private MessageTask messageTask ;
 
     /**
      * 获取用户openId
@@ -76,6 +82,15 @@ public class UserServiceImpl implements UserService {
                 param.put("root" , true) ;
                 userDao.insert(param);
                 Integer id = userDao.searchIdByOpenId(openId);
+
+                MessageEntity entity = new MessageEntity();
+                entity.setSenderId(0);
+                entity.setSenderName("系统消息");
+                entity.setUuid(IdUtil.simpleUUID());
+                entity.setMsg("欢迎您注册称为系统管理员，请及时更新你的员工个人信息。");
+                entity.setSendTime(new Date());
+                messageTask.sendAsync(id+"" , entity);
+
                 return id ;
             }
             else{
@@ -103,7 +118,8 @@ public class UserServiceImpl implements UserService {
             throw new EmosException("用户不存在") ;
         }
 
-        //TODO 从消息队列中接收消息，转移到消息列表
+        //从消息队列中接收消息，转移到消息列表
+        messageTask.receiverAsync(id+"");
         return id ;
     }
 
