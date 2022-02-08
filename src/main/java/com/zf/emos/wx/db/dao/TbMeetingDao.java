@@ -3,17 +3,12 @@ package com.zf.emos.wx.db.dao;
 import com.zf.emos.wx.db.pojo.TbMeeting;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 @Mapper
 public interface TbMeetingDao {
-    int deleteByPrimaryKey(Integer id);
+    public int insertMeeting(TbMeeting tbMeeting) ;
 
-    int insert(TbMeeting record);
-
-    int insertSelective(TbMeeting record);
-
-    TbMeeting selectByPrimaryKey(Integer id);
-
-    int updateByPrimaryKeySelective(TbMeeting record);
-
-    int updateByPrimaryKey(TbMeeting record);
+    public ArrayList<HashMap> searchMyMeetingListByPage(HashMap param) ;
 }

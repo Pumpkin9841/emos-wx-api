@@ -25,7 +25,7 @@ public class MessageEntity implements Serializable {
     @Indexed
     private Integer senderId ;
 
-    private String senderPhoto = "https://pumpkn.xyz/upload/2021/10/NXQW%60%7BUI%5D6NYW32$%7B@1~S1Y-3c97ee1d7b8146788a008ad933217da8.png" ;
+    private String senderPhoto = "https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83erOibQT46XSkarhN5ca1fUia82BI6HjicYP2Blo80Oc3icdFmgQxuqXP5zvR1R1FAiaoJPreTB3uedQvQg/132" ;
 
     private String senderName ;
 

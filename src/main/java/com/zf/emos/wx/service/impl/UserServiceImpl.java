@@ -6,6 +6,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.zf.emos.wx.db.dao.TbDeptDao;
 import com.zf.emos.wx.db.dao.TbUserDao;
 import com.zf.emos.wx.db.pojo.MessageEntity;
 import com.zf.emos.wx.db.pojo.TbUser;
@@ -18,9 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author pumpkin
@@ -39,6 +38,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TbUserDao userDao ;
+    
+    @Autowired
+    private TbDeptDao deptDao ;
 
     @Autowired
     private MessageTask messageTask ;
@@ -98,7 +100,7 @@ public class UserServiceImpl implements UserService {
                 throw new EmosException("系统中已存在超级管理员") ;
             }
         }
-        //TODO
+        //TODO 创建普通用户
         else{
             return 0;
         }
@@ -139,5 +141,29 @@ public class UserServiceImpl implements UserService {
     public HashMap searchUserSummary(int userId) {
         HashMap userSummary = userDao.searchUserSummary(userId);
         return userSummary;
+    }
+
+    @Override
+    public ArrayList<HashMap> searchUserGroupByDept(String keyword) {
+        ArrayList<HashMap> list_1 = deptDao.searchDeptMembers(keyword);
+        ArrayList<HashMap> list_2 = userDao.searchUserGroupByDept(keyword);
+        for (HashMap map_1 : list_1) {
+            long deptId = (long) map_1.get("id");
+            ArrayList<HashMap> members = new ArrayList() ;
+            for (HashMap map_2 : list_2) {
+                long id = (long) map_2.get("id") ;
+                if(deptId == id){
+                    members.add(map_2) ;
+                }
+            }
+            map_1.put("members" , members) ;
+        }
+        return list_1;
+    }
+
+    @Override
+    public ArrayList<HashMap> searchMembers(List param) {
+        ArrayList<HashMap> list = userDao.searchMembers(param);
+        return list;
     }
 }

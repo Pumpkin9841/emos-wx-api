@@ -1,87 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zf.emos.wx.db.dao.TbMeetingDao">
-  <resultMap id="BaseResultMap" type="com.zf.emos.wx.db.pojo.TbMeeting">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="param_key" jdbcType="VARCHAR" property="paramKey" />
-    <result column="param_value" jdbcType="VARCHAR" property="paramValue" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, param_key, param_value, `status`, remark
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from sys_config
-    where id = #{id,jdbcType=INTEGER}
+  <insert id="insertMeeting" parameterType="com.zf.emos.wx.db.pojo.TbMeeting">
+    INSERT INTO tb_meeting SET
+    uuid = #{uuid} ,
+    title = #{title} ,
+    creator_id = #{creatorId},
+    date = #{date} ,
+    <if test="place != null">
+      place = #{place} ,
+    </if>
+    start = #{start} ,
+    end = #{end} ,
+    type = #{type} ,
+    members = #{members} ,
+    `desc` = #{desc} ,
+    instance_id = #{instanceId},
+    status = #{status},
+    create_time = #{createTime}
+  </insert>
+  <select id="searchMyMeetingListByPage" parameterType="hashmap" resultType="hashmap">
+    SELECT
+		 m.id,
+		 m.uuid,
+		 m.title,
+		 u2.name,
+		 DATE_FORMAT(m.date,'%Y年%m月%d日') AS date,
+		 m.place,
+		 DATE_FORMAT(m.start,'%H:%i') AS start,
+		 DATE_FORMAT(m.end,'%H:%i') AS end ,
+		 m.type,
+		 m.status,
+		 m.desc,
+		 u2.photo,
+		 TIMESTAMPDIFF(HOUR,CONCAT(m.date," ",m.start),CONCAT(m.date," ",m.end)) AS HOUR
+    FROM tb_meeting m
+    JOIN tb_user u1 ON JSON_CONTAINS(m.members, CAST(u1.id AS CHAR))
+    JOIN tb_user u2 ON m.creator_id = u2.id
+    WHERE u1.id = #{userId} AND m.status IN (3,4)
+            AND u1.status = 1 AND u2.status = 1
+    ORDER BY m.date , m.start , m.id
+    LIMIT #{start} , #{length}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from sys_config
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.zf.emos.wx.db.pojo.TbMeeting" useGeneratedKeys="true">
-    insert into sys_config (param_key, param_value, `status`, 
-      remark)
-    values (#{paramKey,jdbcType=VARCHAR}, #{paramValue,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
-      #{remark,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.zf.emos.wx.db.pojo.TbMeeting" useGeneratedKeys="true">
-    insert into sys_config
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="paramKey != null">
-        param_key,
-      </if>
-      <if test="paramValue != null">
-        param_value,
-      </if>
-      <if test="status != null">
-        `status`,
-      </if>
-      <if test="remark != null">
-        remark,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="paramKey != null">
-        #{paramKey,jdbcType=VARCHAR},
-      </if>
-      <if test="paramValue != null">
-        #{paramValue,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=TINYINT},
-      </if>
-      <if test="remark != null">
-        #{remark,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zf.emos.wx.db.pojo.TbMeeting">
-    update sys_config
-    <set>
-      <if test="paramKey != null">
-        param_key = #{paramKey,jdbcType=VARCHAR},
-      </if>
-      <if test="paramValue != null">
-        param_value = #{paramValue,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        `status` = #{status,jdbcType=TINYINT},
-      </if>
-      <if test="remark != null">
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zf.emos.wx.db.pojo.TbMeeting">
-    update sys_config
-    set param_key = #{paramKey,jdbcType=VARCHAR},
-      param_value = #{paramValue,jdbcType=VARCHAR},
-      `status` = #{status,jdbcType=TINYINT},
-      remark = #{remark,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
 </mapper>

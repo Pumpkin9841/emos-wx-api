@@ -1,19 +1,27 @@
 package com.zf.emos.wx.controller;
 
+import cn.hutool.json.JSONUtil;
 import com.zf.emos.wx.common.utils.R;
 import com.zf.emos.wx.config.shiro.JwtUtils;
 import com.zf.emos.wx.controller.form.LoginForm;
 import com.zf.emos.wx.controller.form.RegisterForm;
+import com.zf.emos.wx.controller.form.SearchMembersForm;
+import com.zf.emos.wx.controller.form.SearchUserGroupByDeptForm;
+import com.zf.emos.wx.exception.EmosException;
 import com.zf.emos.wx.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -68,5 +76,25 @@ public class UserController {
         int userId = jwtUtils.getUserId(token);
         HashMap userSummary = userService.searchUserSummary(userId);
         return R.ok().put("result" , userSummary) ;
+    }
+
+    @PostMapping("/searchUserGroupByDept")
+    @ApiOperation("查询员工列表，按部门分组排列")
+    @RequiresPermissions(value = {"ROOT" , "EMPLOYEE:SELECT"} ,logical = Logical.OR)
+    public R searchUserGroupByDept(@Valid @RequestBody SearchUserGroupByDeptForm searchUserGroupByDeptForm , @RequestHeader("token") String token){
+        ArrayList<HashMap> maps = userService.searchUserGroupByDept(searchUserGroupByDeptForm.getKeyword());
+        return R.ok().put("result" , maps) ;
+    }
+
+    @PostMapping("/searchMembers")
+    @ApiOperation("查询成员")
+    @RequiresPermissions(value = {"ROOT", "MEETING:INSERT", "MEETING:UPDATE"}, logical = Logical.OR)
+    public R searchMembers(@Valid @RequestBody SearchMembersForm form) {
+        if (!JSONUtil.isJsonArray(form.getMembers())) {
+            throw new EmosException("members不是JSON数组");
+        }
+        List param = JSONUtil.parseArray(form.getMembers()).toList(Integer.class);
+        ArrayList list = userService.searchMembers(param);
+        return R.ok().put("result", list);
     }
 }

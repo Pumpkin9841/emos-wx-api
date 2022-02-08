@@ -1,10 +1,11 @@
 package com.zf.emos.wx.db.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
 
 /**
- * sys_config
+ * tb_meeting
  * @author 
  */
 @Data
@@ -12,27 +13,72 @@ public class TbMeeting implements Serializable {
     /**
      * 主键
      */
-    private Integer id;
+    private Long id;
 
     /**
-     * 参数名
+     * UUID
      */
-    private String paramKey;
+    private String uuid;
 
     /**
-     * 参数值
+     * 会议题目
      */
-    private String paramValue;
+    private String title;
 
     /**
-     * 状态
+     * 创建人ID
      */
-    private Byte status;
+    private Long creatorId;
 
     /**
-     * 备注
+     * 日期
      */
-    private String remark;
+    private String date;
+
+    /**
+     * 开会地点
+     */
+    private String place;
+
+    /**
+     * 开始时间
+     */
+    private String start;
+
+    /**
+     * 结束时间
+     */
+    private String end;
+
+    /**
+     * 会议类型（1在线会议，2线下会议）
+     */
+    private Short type;
+
+    /**
+     * 参与者
+     */
+    private Object members;
+
+    /**
+     * 会议内容
+     */
+    private String desc;
+
+    /**
+     * 工作流实例ID
+     */
+    private String instanceId;
+
+    /**
+     * 状态（1未开始，2进行中，3已结束）
+     */
+    private Short status;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 
     private static final long serialVersionUID = 1L;
 }
